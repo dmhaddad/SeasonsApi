@@ -1,0 +1,23 @@
+.env
+lessons.docx
+
+# Partial code that I took out of Seasons-API.py for testing
+def main():
+    name, email, phone = get_person_info()
+    
+    risk_data = call_risk_detector(name, email, phone)
+    #print("Full Risk Detector response:")
+    #pprint(risk_data)
+
+    #List of risks associated with the response
+    input_results = json.loads(risk_data['result'])
+    #print("input_results response:")
+    #pprint(input_results)
+
+    # Display risk score
+    #print(f"Risk score: {(input_results['score'])}")
+    #print(f"Risks: {(input_results['risks'])})")
+    
+    #Display worst risk. Consider adding logic if user wants to see worst risk details.
+    #print(f"Worst Risk: {(input_results['worstRisk'])})")
+
