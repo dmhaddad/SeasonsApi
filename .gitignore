@@ -1,7 +1,10 @@
 .env
 lessons.docx
 
-# Partial code that I took out of Seasons-API.py for testing
+
+--------------------------------
+
+# Partial code within seasons script used for debugging.
 def main():
     name, email, phone = get_person_info()
     
@@ -21,3 +24,18 @@ def main():
     #Display worst risk. Consider adding logic if user wants to see worst risk details.
     #print(f"Worst Risk: {(input_results['worstRisk'])})")
 
+
+# Partial code in Holiday API script used for debugging.
+print(response) # This only shows the status code of the response
+print(response.json()) # This shows the full JSON response from the API
+    
+    # ----------The below code was when this existed outside a function. ---------------#
+    found = False
+    for holiday in holidays:
+        #print(holiday['date']) # This prints all the holiday dates in the response
+        if holiday["date") == formatted_date:
+            print(holiday["localName"]  # This prints the name of the holiday if the date matches
+            found = True
+            break # Exit the loop once the holiday is found
+   # if not found:
+    #    print("No holiday on this date.")
