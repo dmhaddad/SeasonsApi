@@ -2,21 +2,24 @@
 Task: Ask the User for a date, based on the date, tell them what Season we are in (meteorological seasons) in English, Spanish, or both based on their input.
 Meteorological Seasons:
 
-Winter	   December-February: December (12), January (1), February (2)
-Spring	   March - May: March (3), April (4), May (5)
-Summer	   June-August: June (6), July (7), August (8)
-Fall	   September-November: September (9), October (10), November (11)
 
-Description: This program stores the start of each season as variables which is used to determine the actual season based on the 
-month extracted from the user input date.
+Description: This program stores the start of each season as variables which is used to determine the actual season based on the month extracted from the date inputted by the user.
+The user in prompted to enter basic identifying information (full name, email, phone number) which is validated using the NameAPI Risk Detector API to reduce fraudulent users. If the 
+user is likely vaid, they are then prompted to enter a date in MMDDYYYY format and their language preference (English, Spanish, or both). The program then outputs the corresponding season(s).
+If the date corresponds to a US holiday in 2025, the holiday name is also displayed in the selected language(s) using the Public Holiday API and a predefined translation table/function.
+
+Author: David Haddad
 
 """
+
 from datetime import datetime
 import requests
 import os
 from dotenv import load_dotenv
 from pprint import pprint
 import json
+from holidayApi import holiday
+from holiday_translations import holiday_translation_spanish
 
 load_dotenv()
 
@@ -35,9 +38,13 @@ def get_person_info():
     while True:
         name = input("Enter your full name: ").strip()
         email = input("Enter your email address: ").strip()
-        phone = input("Enter your phone number including country code (digits only): ").strip()
+        if "@" not in email or "." not in email: # Basic email format validation
+            print("\nPlease enter a valid-looking email address (must contain '@' and '.').\n")
+            continue
+        phone = input("Enter your phone number, starting with the country code (digits only): ").strip()
         if not email or not phone:
             print("\nEmail and phone are required. Please enter a value for both fields.\n")
+
         else:
             return name, email, phone
 
@@ -161,6 +168,9 @@ def main():
     date = get_date() 
     language = get_language()
     month = int(date[:2])
+    holiday_name = holiday(date) # Call holiday API to get holiday name in English
+    #holiday_name_spanish = holiday_name  # Initialize Spanish holiday name
+
 
     print()
 
@@ -170,6 +180,15 @@ def main():
         print(spanish_season(month)) 
     elif language == 'both': 
         print(f'{english_season(month)} - {spanish_season(month)}')
+    
+    holiday_name_spanish = holiday_translation_spanish(holiday_name) # Translate holiday name to Spanish
+    
+    if holiday_name and language == 'english':
+        print(f'\nNote: The date you entered corresponds to the holiday: {holiday_name}\n')
+    elif holiday_name and language == 'spanish':
+        print(f'\nNota: La fecha que ingresaste corresponde al feriado: {holiday_name_spanish}\n')
+    elif holiday_name and language == 'both':
+        print(f'\nNote/Nota: The date you entered corresponds to the holiday/feriado: {holiday_name} - {holiday_name_spanish}\n')
 
 if __name__ == "__main__":
     main()
